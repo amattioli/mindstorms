@@ -7,22 +7,17 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
-import lejos.utility.Delay;
 
-public class ObstacleAvoidingBehaviour implements Behavior {
+public class CloseObstacleAvoidingBehaviour implements Behavior {
 	private float minDistance;
 	private MovePilot pilot;
 	private EV3UltrasonicSensor ultrasonicSensor;
-//	private SampleProvider averageDistanceProvider;
 	private boolean suppressed = false;
-	private float lastDistanceSampled;
-	private TurnDirectionGenerator turnDirectionGenerator = new TurnDirectionGenerator();
 	
-	public ObstacleAvoidingBehaviour(MovePilot pilot, EV3UltrasonicSensor ultrasonicSensor, float minDistance) {
+	public CloseObstacleAvoidingBehaviour(MovePilot pilot, EV3UltrasonicSensor ultrasonicSensor, float minDistance) {
 		this.minDistance = minDistance;
 		this.pilot = pilot;
 		this.ultrasonicSensor = ultrasonicSensor;
-		this.lastDistanceSampled = minDistance * 2.0f;
 	}
 	
 	@Override
@@ -32,23 +27,13 @@ public class ObstacleAvoidingBehaviour implements Behavior {
 		float[] sample = new float[averageDistanceProvider.sampleSize()];
 		averageDistanceProvider.fetchSample(sample, 0);
 //		System.out.println(sample[0]*100);
-		this.lastDistanceSampled = sample[0]*100;
-		return this.lastDistanceSampled < minDistance;
+		return sample[0]*100 < minDistance;
 	}
 
 	@Override
 	public void action() {
-		pilot.arcForward(this.lastDistanceSampled/2.0f * turnDirectionGenerator.getTurnDirection());
-		Date start = new Date();
-		long passedTime = 0;
-		while(!suppressed && (passedTime < 1000)) {
-			Thread.yield();
-//			Delay.msDelay(100);
-			passedTime = (new Date()).getTime() - start.getTime();
-//			System.out.println(passedTime);
-		}
-		pilot.stop();
-		this.suppressed = false;
+		pilot.travel(-20);
+		pilot.rotate(90);
 	}
 
 	@Override

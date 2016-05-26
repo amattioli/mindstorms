@@ -44,8 +44,9 @@ public class MySubsumption {
 		MovePilot pilot = pilot();
 		Behavior[] behaviors = new Behavior[] {
 				new CruiseBehaviour(pilot),
-				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 40),
+				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 50),
 //				new StopBehaviour(),
+				new CloseObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 10),
 				new CollisionBackupBehaviour(pilot, leftTouch, 1),
 				new CollisionBackupBehaviour(pilot, rightTouch, -1)
 		};
