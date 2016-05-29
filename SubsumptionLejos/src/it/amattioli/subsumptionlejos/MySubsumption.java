@@ -42,11 +42,12 @@ public class MySubsumption {
 		EV3TouchSensor rightTouch = rightTouchSensor();
 		EV3UltrasonicSensor ultrasonicSensor = ultrasonicSensor();
 		MovePilot pilot = pilot();
+		Logger logger = new Logger();
 		Behavior[] behaviors = new Behavior[] {
 				new CruiseBehaviour(pilot),
-				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 50),
+				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 50, logger),
 //				new StopBehaviour(),
-				new CloseObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 10),
+				new CloseObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 10, logger),
 				new CollisionBackupBehaviour(pilot, leftTouch, 1),
 				new CollisionBackupBehaviour(pilot, rightTouch, -1)
 		};

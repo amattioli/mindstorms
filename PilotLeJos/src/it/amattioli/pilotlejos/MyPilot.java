@@ -18,7 +18,8 @@ public class MyPilot {
 	private static void square(MovePilot pilot) {
 		for (int i=0; i<4; i++) {
 			pilot.travel(50);
-			pilot.arc(20, 90);
+//			pilot.arc(20, 90);
+			pilot.rotate(90);
 		}
 	}
 	
@@ -30,8 +31,12 @@ public class MyPilot {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, 5.5634).offset(-7);
-		Wheel wheel2 = WheeledChassis.modelWheel(Motor.D, 5.5634).offset(7);
+		double wheelRadius = 5.5634;
+		double cleft = 0.996523118;
+		double cright = 1.003476882;
+		double wheelDistance = 12.31050325;
+		Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, wheelRadius*cleft).offset(-wheelDistance/2.0);
+		Wheel wheel2 = WheeledChassis.modelWheel(Motor.D, wheelRadius*cright).offset(wheelDistance/2.0);
 		Chassis chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 }, WheeledChassis.TYPE_DIFFERENTIAL);
 		MovePilot pilot = new MovePilot(chassis);
 		OdometryPoseProvider poseProvider = new OdometryPoseProvider(pilot);
@@ -42,10 +47,12 @@ public class MyPilot {
 //		pilot.rotate(-90); // degree clockwise
 //		pilot.travel(-50, true); // move backward for 50 cm
 //		while (pilot.isMoving()) Thread.yield();
-//		pilot.rotate(-90);
-		line(pilot);
+		pilot.rotate(-90);
+//		square(pilot);
 		Pose pose = poseProvider.getPose();
-		System.out.println(pose.getX()+" "+pose.getY());
+		System.out.println("x: "+pose.getX());
+		System.out.println("y: "+pose.getY());
+		System.out.println("theta: "+pose.getHeading());
 		pilot.stop();
 		Delay.msDelay(5000);
 	}
