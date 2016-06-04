@@ -3,7 +3,7 @@ package it.amattioli.subsumptionlejos;
 import java.util.Date;
 
 public class TurnDirectionGenerator {
-	private long timeThreshold = 2000;
+	private long timeThreshold = 4000;
 	private long lastInvoked = new Date().getTime();
 	private float lastGenerated = 1.0f;
 	

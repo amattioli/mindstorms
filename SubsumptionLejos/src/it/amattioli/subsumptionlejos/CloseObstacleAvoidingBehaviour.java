@@ -16,13 +16,11 @@ public class CloseObstacleAvoidingBehaviour implements Behavior {
 	private EV3UltrasonicSensor ultrasonicSensor;
 	private boolean suppressed = false;
 	private Logger logger;
-	private OdometryPoseProvider poseProvider;
 	
 	public CloseObstacleAvoidingBehaviour(MovePilot pilot, EV3UltrasonicSensor ultrasonicSensor, float minDistance, Logger logger) {
 		this.minDistance = minDistance;
 		this.pilot = pilot;
 		this.ultrasonicSensor = ultrasonicSensor;
-		this.poseProvider = new OdometryPoseProvider(pilot);
 		this.logger = logger;
 	}
 	
@@ -33,9 +31,8 @@ public class CloseObstacleAvoidingBehaviour implements Behavior {
 		float[] sample = new float[averageDistanceProvider.sampleSize()];
 		averageDistanceProvider.fetchSample(sample, 0);
 //		System.out.println(sample[0]*100);
-		Pose pose = poseProvider.getPose();
 		float lastDistanceSampled = sample[0]*100;
-		logger.log(pose.getX(), pose.getY(), pose.getHeading(), lastDistanceSampled);
+		logger.log(lastDistanceSampled);
 		return lastDistanceSampled < minDistance;
 	}
 

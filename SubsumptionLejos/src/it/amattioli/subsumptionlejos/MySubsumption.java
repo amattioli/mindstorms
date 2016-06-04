@@ -28,8 +28,12 @@ public class MySubsumption {
 	}
 
 	private static MovePilot pilot() {
-		Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, 5.6).offset(-7);
-		Wheel wheel2 = WheeledChassis.modelWheel(Motor.D, 5.6).offset(7);
+		double wheelRadius = 5.5634;
+		double cleft = 0.996523118;
+		double cright = 1.003476882;
+		double wheelDistance = 12.31050325;
+		Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, wheelRadius*cleft).offset(-wheelDistance/2.0);
+		Wheel wheel2 = WheeledChassis.modelWheel(Motor.D, wheelRadius*cright).offset(wheelDistance/2.0);
 		Chassis chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 }, WheeledChassis.TYPE_DIFFERENTIAL);
 		MovePilot pilot = new MovePilot(chassis);
 		pilot.setLinearSpeed(5);
@@ -42,12 +46,12 @@ public class MySubsumption {
 		EV3TouchSensor rightTouch = rightTouchSensor();
 		EV3UltrasonicSensor ultrasonicSensor = ultrasonicSensor();
 		MovePilot pilot = pilot();
-		Logger logger = new Logger();
+		Logger logger = new Logger(pilot);
 		Behavior[] behaviors = new Behavior[] {
 				new CruiseBehaviour(pilot),
-				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 50, logger),
+				new ObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 60, logger),
 //				new StopBehaviour(),
-				new CloseObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 10, logger),
+				new CloseObstacleAvoidingBehaviour(pilot, ultrasonicSensor, 20, logger),
 				new CollisionBackupBehaviour(pilot, leftTouch, 1),
 				new CollisionBackupBehaviour(pilot, rightTouch, -1)
 		};

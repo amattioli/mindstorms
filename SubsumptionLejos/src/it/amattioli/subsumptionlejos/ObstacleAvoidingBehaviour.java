@@ -20,14 +20,12 @@ public class ObstacleAvoidingBehaviour implements Behavior {
 	private float lastDistanceSampled;
 	private TurnDirectionGenerator turnDirectionGenerator = new TurnDirectionGenerator();
 	private Logger logger;
-	private OdometryPoseProvider poseProvider;
 	
 	public ObstacleAvoidingBehaviour(MovePilot pilot, EV3UltrasonicSensor ultrasonicSensor, float minDistance, Logger logger) {
 		this.minDistance = minDistance;
 		this.pilot = pilot;
 		this.ultrasonicSensor = ultrasonicSensor;
 		this.lastDistanceSampled = minDistance * 2.0f;
-		this.poseProvider = new OdometryPoseProvider(pilot);
 		this.logger = logger;
 	}
 	
@@ -39,8 +37,7 @@ public class ObstacleAvoidingBehaviour implements Behavior {
 		averageDistanceProvider.fetchSample(sample, 0);
 //		System.out.println(sample[0]*100);
 		this.lastDistanceSampled = sample[0]*100;
-		Pose pose = poseProvider.getPose();
-		logger.log(pose.getX(), pose.getY(), pose.getHeading(), this.lastDistanceSampled);
+		logger.log(this.lastDistanceSampled);
 		return this.lastDistanceSampled < minDistance;
 	}
 
